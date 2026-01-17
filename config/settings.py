@@ -37,7 +37,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -84,8 +84,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
-STATICFILES_DIRS = (BASE_DIR / 'static',)
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Путь к вашей папке static
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
