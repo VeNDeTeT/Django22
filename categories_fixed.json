@@ -1,0 +1,26 @@
+[
+{
+  "model": "catalog.category",
+  "pk": 2,
+  "fields": {
+    "name": "Электроника",
+    "description": "Техника и гаджеты"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 3,
+  "fields": {
+    "name": "Одежда",
+    "description": "Одежда и обувь"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 4,
+  "fields": {
+    "name": "Книги",
+    "description": "Книги и учебники"
+  }
+}
+]
