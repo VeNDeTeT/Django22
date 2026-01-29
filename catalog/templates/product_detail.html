@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Skystore - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h1 class="card-title mb-4">{{ product.name }}</h1>
+
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                             class="img-fluid mb-4" style="max-height: 400px; object-fit: cover;">
+                    {% endif %}
+
+                    <div class="product-info text-start mt-4">
+                        <p class="lead"><strong>Описание:</strong></p>
+                        <p>{{ product.description|default:"Описание отсутствует" }}</p>
+
+                        <h3 class="text-success mb-3"><strong>Цена:</strong> {{ product.price }} руб.</h3>
+
+                        {% if product.category %}
+                            <p><strong>Категория:</strong> {{ product.category.name }}</p>
+                        {% endif %}
+
+                        <p><strong>Создан:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</p>
+                        <p><strong>Обновлен:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'catalog:home' %}" class="btn btn-primary btn-lg">← На главную</a>
+                        <a href="{% url 'catalog:catalog' %}" class="btn btn-outline-primary btn-lg ms-2">← В каталог</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
