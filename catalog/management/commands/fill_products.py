@@ -3,7 +3,7 @@ from catalog.models import Category, Product
 
 
 class Command(BaseCommand):
-    help = 'Добавляет тестовые товары в базу (удаляет старые)'
+    help = "Добавляет тестовые товары в базу (удаляет старые)"
 
     def handle(self, *args, **options):
         print("=" * 50)
@@ -20,21 +20,14 @@ class Command(BaseCommand):
         print("\n2. Создание категорий...")
 
         cat1 = Category.objects.create(
-            name="Электроника",
-            description="Техника и гаджеты"
+            name="Электроника", description="Техника и гаджеты"
         )
         print(f"   ✅ Категория: {cat1.name}")
 
-        cat2 = Category.objects.create(
-            name="Одежда",
-            description="Одежда и обувь"
-        )
+        cat2 = Category.objects.create(name="Одежда", description="Одежда и обувь")
         print(f"   ✅ Категория: {cat2.name}")
 
-        cat3 = Category.objects.create(
-            name="Книги",
-            description="Книги и учебники"
-        )
+        cat3 = Category.objects.create(name="Книги", description="Книги и учебники")
         print(f"   ✅ Категория: {cat3.name}")
 
         # 3. Создаем товары
@@ -45,7 +38,7 @@ class Command(BaseCommand):
             name="Смартфон iPhone",
             description="Флагманский смартфон",
             price=89999.99,
-            category=cat1
+            category=cat1,
         )
         print("   ✅ Товар: Смартфон iPhone - 89999.99 руб.")
 
@@ -53,7 +46,7 @@ class Command(BaseCommand):
             name="Ноутбук ASUS",
             description="Игровой ноутбук",
             price=74999.99,
-            category=cat1
+            category=cat1,
         )
         print("   ✅ Товар: Ноутбук ASUS - 74999.99 руб.")
 
@@ -62,7 +55,7 @@ class Command(BaseCommand):
             name="Футболка",
             description="Хлопковая футболка",
             price=1499.99,
-            category=cat2
+            category=cat2,
         )
         print("   ✅ Товар: Футболка - 1499.99 руб.")
 
@@ -70,7 +63,7 @@ class Command(BaseCommand):
             name="Джинсы",
             description="Классические джинсы",
             price=4999.99,
-            category=cat2
+            category=cat2,
         )
         print("   ✅ Товар: Джинсы - 4999.99 руб.")
 
@@ -79,7 +72,7 @@ class Command(BaseCommand):
             name="Книга по Python",
             description="Учебник по программированию",
             price=1999.99,
-            category=cat3
+            category=cat3,
         )
         print("   ✅ Товар: Книга по Python - 1999.99 руб.")
 
@@ -97,7 +90,7 @@ class Command(BaseCommand):
         print(f"   • Товаров: {total_products}")
 
         # Самый дорогой товар
-        expensive = Product.objects.order_by('-price').first()
+        expensive = Product.objects.order_by("-price").first()
         print(f"   • Самый дорогой: {expensive.name} ({expensive.price} руб.)")
 
         print("\n" + "=" * 50)
