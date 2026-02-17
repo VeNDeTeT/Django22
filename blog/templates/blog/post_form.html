@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Редактировать{% else %}Создать{% endif %} статью{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1>{% if form.instance.pk %}Редактировать{% else %}Создать{% endif %} статью</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-8">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+                {{ form.content.label_tag }}
+                {{ form.content }}
+                {{ form.is_published.label_tag }}
+                {{ form.is_published }}
+            </div>
+            <div class="col-md-4">
+                {{ form.preview.label_tag }}
+                {{ form.preview }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+        <a href="{% url 'blog:list' %}" class="btn btn-secondary mt-3">Отмена</a>
+    </form>
+</div>
+{% endblock %}

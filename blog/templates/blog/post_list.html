@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Блог{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Блог</h1>
+        <a href="{% url 'blog:create' %}" class="btn btn-success">✏️ Создать статью</a>
+    </div>
+
+    {% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>{{ post.title }}</h5>
+            <p>{{ post.content|truncatewords:20 }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    {{ post.views_count }} просмотров
+                    {% if not post.is_published %}
+                        <span class="badge bg-secondary ms-2">Черновик</span>
+                    {% endif %}
+                </small>
+                <div class="btn-group">
+                    <a href="{% url 'blog:detail' post.pk %}" class="btn btn-primary btn-sm">Читать</a>
+                    <a href="{% url 'blog:update' post.pk %}" class="btn btn-warning btn-sm">Изменить</a>
+                    <a href="{% url 'blog:delete' post.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Статьи отсутствуют</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
