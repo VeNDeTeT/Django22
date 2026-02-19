@@ -27,7 +27,7 @@ class PostDetailView(DetailView):
         return obj
 
 
-# CRUD ✅
+# CRUD
 class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'content', 'preview', 'is_published']
