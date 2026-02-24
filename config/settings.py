@@ -1,21 +1,19 @@
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-from decouple import config
-from django.conf.global_settings import STATICFILES_DIRS
 
+# Загружаем .env файл (ОДИН источник правды)
 load_dotenv(override=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-
-DEBUG = True if os.getenv("DEBUG") == "True" else False
-
+DEBUG = os.getenv("DEBUG") == "True"  # Упрощаем запись
 ALLOWED_HOSTS = []
 
-
+# Приложения
 INSTALLED_APPS = [
+    "users",                           # пользовательское приложение первым
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -25,6 +23,14 @@ INSTALLED_APPS = [
     "catalog",
     "blog"
 ]
+
+# Кастомная модель пользователя
+AUTH_USER_MODEL = "users.CustomUser"
+
+# Настройки аутентификации
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = '/catalog/'
+LOGOUT_REDIRECT_URL = '/catalog/'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -55,18 +61,34 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+# SQLite пока закомментируем
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
+# Используем PostgreSQL
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
+        "NAME": os.getenv("DB_NAME"),      # myprojectdb
+        "USER": os.getenv("DB_USER"),      # postgres
+        "PASSWORD": os.getenv("DB_PASSWORD"),  # 3303
+        "HOST": os.getenv("DB_HOST"),       # localhost
+        "PORT": os.getenv("DB_PORT"),       # 5432
     }
 }
-
+# Email настройки
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'lala-3303@yandex.ru'
+EMAIL_HOST_PASSWORD = 'fnmhydsnjmnwatqx'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -83,20 +105,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
 STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [BASE_DIR / "static"]  # Путь к вашей папке static
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Для отладки - проверим загрузку переменных (времено)
+print("=== Проверка переменных окружения ===")
+print(f"DB_NAME: {os.getenv('DB_NAME')}")
+print(f"DB_USER: {os.getenv('DB_USER')}")
+print(f"DB_HOST: {os.getenv('DB_HOST')}")
+print(f"DEBUG: {os.getenv('DEBUG')}")
+print(f"SECRET_KEY загружен: {bool(os.getenv('SECRET_KEY'))}")
+print("===================================")

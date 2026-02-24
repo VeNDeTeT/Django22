@@ -7,8 +7,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("catalog.urls")),
     path('blog/', include('blog.urls')),
+    path('users/', include('users.urls')),
 ]
 
-#  ЭТО для MEDIA
+# ЭТО для MEDIA И STATIC
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -3,4 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Poetry (Django22)" />
   </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (Django22)" project-jdk-type="Python SDK" />
 </project>
