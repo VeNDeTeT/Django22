@@ -25,7 +25,8 @@ INSTALLED_APPS = [
 ]
 
 # Кастомная модель пользователя
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = 'users.CustomUser'
+
 
 # Настройки аутентификации
 LOGIN_URL = '/users/login/'
