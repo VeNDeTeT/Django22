@@ -48,7 +48,10 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS":[
+            BASE_DIR / "templates",
+            BASE_DIR / "catalog" / "templates",
+                 ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -117,6 +120,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
+}
 
 # Для отладки - проверим загрузку переменных (времено)
 print("=== Проверка переменных окружения ===")

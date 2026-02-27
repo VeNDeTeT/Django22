@@ -3,10 +3,14 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.core.cache import cache
 from .models import Product
 from .forms import ProductForm
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'product_detail.html'
@@ -30,7 +34,24 @@ class CatalogView(ListView):
     template_name = 'catalog.html'
     context_object_name = 'products'
     paginate_by = 12
-    queryset = Product.objects.filter(is_published=True)  #  Только опубликованные
+    queryset = Product.objects.filter(is_published=True)
+
+    def get_queryset(self):
+        # Получаем номер страницы
+        page_number = self.request.GET.get('page', 1)
+        cache_key = f'catalog_page_{page_number}'
+
+        # Проверяем кеш
+        products = cache.get(cache_key)
+        if products is None:
+            # Запрос к БД только при MISS
+            products = Product.objects.filter(
+                is_published=True
+            ).select_related('category', 'owner')[
+                       :self.paginate_by * 2  # Немного больше для пагинации
+                       ]
+            cache.set(cache_key, products, 60 * 5)  #  5 минут
+        return products
 
 
 #  CRUD с автопривязкой владельца
@@ -89,3 +110,19 @@ class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, UpdateVi
             f' Продукт "{self.object.name}" снят с публикации!'
         )
         return redirect('catalog:catalog')
+
+
+class CategoryView(ListView):
+    template_name = 'category.html'
+    context_object_name = 'products'
+    paginate_by = 12
+
+    def get_queryset(self):
+        from .services import get_products_by_category
+        category_slug = self.kwargs['slug']
+        return get_products_by_category(category_slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category_slug'] = self.kwargs['slug']
+        return context
