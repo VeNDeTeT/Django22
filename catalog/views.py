@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
-from .models import Product
+from .models import Product, Category
 from .forms import ProductForm
 
 
@@ -119,10 +119,19 @@ class CategoryView(ListView):
 
     def get_queryset(self):
         from .services import get_products_by_category
-        category_slug = self.kwargs['slug']
-        return get_products_by_category(category_slug)
+        self.category_pk = self.kwargs['pk']
+        return get_products_by_category(self.category_pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category_slug'] = self.kwargs['slug']
+        context['category_pk'] = self.kwargs['pk']
+
+
+        try:
+            context['category_name'] = Category.objects.get(
+                pk=self.category_pk
+            ).name
+        except Category.DoesNotExist:
+            context['category_name'] = f"Категория #{self.category_pk}"
+
         return context

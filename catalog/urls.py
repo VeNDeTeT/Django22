@@ -22,5 +22,5 @@ urlpatterns = [
 
 
     path("product/<int:pk>/unpublish/", ProductUnpublishView.as_view(), name="product_unpublish"),
-    path('category/<slug:slug>/', CategoryView.as_view(), name='category'),
+    path('category/<int:pk>/', CategoryView.as_view(), name='category'),
 ]
